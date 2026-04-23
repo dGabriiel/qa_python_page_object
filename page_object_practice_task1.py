@@ -31,7 +31,7 @@ class LoginPageAround:
 # Clase para la página principal
 class HomePageAround:
     # Crea un localizador para el campo Ocupación en el perfil de usuario
-    profile_description = ...
+     profile_description = (By.CLASS_NAME, 'profile__description')
 
     def __init__(self, driver):
         self.driver = driver
@@ -42,7 +42,7 @@ class HomePageAround:
 
     # Recupera el valor del campo Ocupación
     def get_description(self):
-        return ...
+        return self.driver.find_element(*self.profile_description).text
 
 
 class TestAround:
@@ -59,21 +59,21 @@ class TestAround:
         self.driver.get('https://around-v1.nm.tripleten-services.com/signin?lng=es')
 
         # Crea una clase de objeto de página para la página de inicio de sesión
-        ...
+        login_page = LoginPageAround(self.driver)
         # iniciar sesión
-        ...
+        login_page.login('sneakers@gmail', 'contraseña')
 
         # Crea un objeto de página para la página principal
-        ...
+        home_page = HomePageAround(self.driver)
         # Espera a que se cargue la página principal
-        ...
+        home_page.wait_for_load_home_page()
         # Guarda el valor de Ocupación en la descripción
-        description = ...
+        description = home_page.get_description()
 
         # Utiliza assert para comprobar que el valor actual de Ocupación coincida con el valor esperado
-        assert ...
+       assert description == 'Ingeniera de software'
 
     @classmethod
     def teardown_class(cls):
         # Cerrar el navegador
-        ...
+        cls.driver.quit()
